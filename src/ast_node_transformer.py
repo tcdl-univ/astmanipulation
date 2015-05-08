@@ -4,7 +4,7 @@ import compileall
 import sys
 import traceback
 import itertools
-
+from ast_report import *
 
 class RewriteInterpolation(NodeTransformer):
     def __init__(self, filename):
@@ -94,19 +94,6 @@ class RewriteInterpolation(NodeTransformer):
     visit_Break = track_reached_lineno
     visit_Continue = track_reached_lineno
 
-    def visit_BinOp(self, node):
-        if isinstance(node.op, Mod):
-            new_node = Call(func=Name(id='check_string', ctx=Load()),
-                            args=[node.left, node.right,
-                                  Num(n=node.lineno),
-                                  Num(n=node.col_offset)],
-                            keywords = [], starargs=None, kwargs=None
-                            )
-            copy_location(new_node, node)
-            fix_missing_locations(new_node)
-            return new_node
-        return node
-
 old_compile = __builtin__.compile
 
 def compile(source, filename, mode, flags=0):
@@ -127,8 +114,6 @@ filename = "../test/sample_py.py"
 code = open(filename).read()
 tree = parse(code, filename)
 tree = RewriteInterpolation(filename).visit(tree)
-print dump(tree)
-
-
-
+code = old_compile(tree, filename, "exec")
+exec(code, globals())
 
