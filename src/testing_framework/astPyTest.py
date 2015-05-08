@@ -8,18 +8,18 @@ class PyUnitAssertionError(AssertionError):
 
 def assert_equal(a, b):
     if a != b:
-        raise AssertionError("{0} is not equal to {1}".format(a, b))
+        raise PyUnitAssertionError("{0} is not equal to {1}".format(a, b))
 
 
 def assert_not_equal(a, b):
     if a == b:
-        raise AssertionError("{0} is actually equal to {1}".format(a, b))
+        raise PyUnitAssertionError("{0} is actually equal to {1}".format(a, b))
 
 
 test_namespace = {'assert_equal': assert_equal, 'assert_not_equal': assert_not_equal}
 
 
-class AssertCmpTransformer(ast.NodeTransformer):
+class AssertPyUnitTransformer(ast.NodeTransformer):
     """Transform 'assert a==b' into 'assert_equal(a, b)'
     """
 
@@ -76,7 +76,7 @@ class Runner(object):
         self.code_lines = [None] + code.splitlines()
 
     def modify_tree(self):
-        self.ast_tree = AssertCmpTransformer().visit(self.ast_tree)
+        self.ast_tree = AssertPyUnitTransformer().visit(self.ast_tree)
 
     def inspect_clases(self):
         for node in self.ast_tree.body:
@@ -111,7 +111,7 @@ class Runner(object):
             exec(co, test_namespace)
             test_namespace[test_name]()
             self.results.append(SuccessFulResult(test_name))
-        except AssertionError as e:
+        except PyUnitAssertionError as e:
             self.results.append(FailedResult(test_name, e, test_node.lineno, self.code_lines[test_node.lineno]))
         except Exception as e:
             self.results.append(ErrorResult(test_name, e, test_node.lineno, self.code_lines[test_node.lineno]))
