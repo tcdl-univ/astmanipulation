@@ -1,0 +1,213 @@
+digraph {
+	graph [fontsize=12 label="AsT Nodes" ratio=compress size="2400,3000"]
+		Add
+		And
+		Assert
+		Assign
+		Attribute
+		AugAssign
+		AugLoad
+		AugStore
+		BinOp
+		BitAnd
+		BitOr
+		BitXor
+		BoolOp
+		Break
+		Bytes
+		Call
+		ClassDef
+		Compare
+		Continue
+		Del
+		Delete
+		Dict
+		DictComp
+		Div
+		Ellipsis
+		Eq
+		ExceptHandler
+		Expr
+		Expression
+		ExtSlice
+		FloorDiv
+		For
+		FunctionDef
+		GeneratorExp
+		Global
+		Gt
+		GtE
+		If
+		IfExp
+		Import
+		ImportFrom
+		In
+		Index
+		Interactive
+		Invert
+		Is
+		IsNot
+		LShift
+		Lambda
+		List
+		ListComp
+		Load
+		Lt
+		LtE
+		Mod
+		Module
+		Mult
+		Name
+		NameConstant
+		Nonlocal
+		Not
+		NotEq
+		NotIn
+		Num
+		Or
+		Param
+		Pass
+		Pow
+		RShift
+		Raise
+		Return
+		Set
+		SetComp
+		Slice
+		Starred
+		Store
+		Str
+		Sub
+		Subscript
+		Suite
+		Try
+		Tuple
+		UAdd
+		USub
+		UnaryOp
+		While
+		With
+		Yield
+		YieldFrom
+		alias
+		arg
+		arguments
+		boolop
+		cmpop
+		comprehension
+		excepthandler
+		expr
+		expr_context
+		keyword
+		mod
+		operator
+		slice
+		stmt
+		unaryop
+		withitem
+			operator -> Add
+			boolop -> And
+			stmt -> Assert
+			stmt -> Assign
+			expr -> Attribute
+			stmt -> AugAssign
+			expr_context -> AugLoad
+			expr_context -> AugStore
+			expr -> BinOp
+			operator -> BitAnd
+			operator -> BitOr
+			operator -> BitXor
+			expr -> BoolOp
+			stmt -> Break
+			expr -> Bytes
+			expr -> Call
+			stmt -> ClassDef
+			expr -> Compare
+			stmt -> Continue
+			expr_context -> Del
+			stmt -> Delete
+			expr -> Dict
+			expr -> DictComp
+			operator -> Div
+			expr -> Ellipsis
+			cmpop -> Eq
+			excepthandler -> ExceptHandler
+			stmt -> Expr
+			mod -> Expression
+			slice -> ExtSlice
+			operator -> FloorDiv
+			stmt -> For
+			stmt -> FunctionDef
+			expr -> GeneratorExp
+			stmt -> Global
+			cmpop -> Gt
+			cmpop -> GtE
+			stmt -> If
+			expr -> IfExp
+			stmt -> Import
+			stmt -> ImportFrom
+			cmpop -> In
+			slice -> Index
+			mod -> Interactive
+			unaryop -> Invert
+			cmpop -> Is
+			cmpop -> IsNot
+			operator -> LShift
+			expr -> Lambda
+			expr -> List
+			expr -> ListComp
+			expr_context -> Load
+			cmpop -> Lt
+			cmpop -> LtE
+			operator -> Mod
+			mod -> Module
+			operator -> Mult
+			expr -> Name
+			expr -> NameConstant
+			stmt -> Nonlocal
+			unaryop -> Not
+			cmpop -> NotEq
+			cmpop -> NotIn
+			expr -> Num
+			boolop -> Or
+			expr_context -> Param
+			stmt -> Pass
+			operator -> Pow
+			operator -> RShift
+			stmt -> Raise
+			stmt -> Return
+			expr -> Set
+			expr -> SetComp
+			slice -> Slice
+			expr -> Starred
+			expr_context -> Store
+			expr -> Str
+			operator -> Sub
+			expr -> Subscript
+			mod -> Suite
+			stmt -> Try
+			expr -> Tuple
+			unaryop -> UAdd
+			unaryop -> USub
+			expr -> UnaryOp
+			stmt -> While
+			stmt -> With
+			expr -> Yield
+			expr -> YieldFrom
+			AST -> alias
+			AST -> arg
+			AST -> arguments
+			AST -> boolop
+			AST -> cmpop
+			AST -> comprehension
+			AST -> excepthandler
+			AST -> expr
+			AST -> expr_context
+			AST -> keyword
+			AST -> mod
+			AST -> operator
+			AST -> slice
+			AST -> stmt
+			AST -> unaryop
+			AST -> withitem
+}

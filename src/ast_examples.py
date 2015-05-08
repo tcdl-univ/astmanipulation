@@ -1,7 +1,12 @@
 from ast import *
 import pprint
+from ast_pprint import parseprint
 
-dumped_ast = dump(parse("for i in range(10): print i"))
+code = """import antigravity
+for i in range(10): print i"""
+ast = parse(code)
+dumped_ast = dump(ast)
+pprint.pprint(parseprint(code))
 pprint.pprint(dumped_ast)
 
 
