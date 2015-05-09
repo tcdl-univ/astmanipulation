@@ -2,6 +2,7 @@ import ast
 from src.ast_pprint import parseprint
 from types import *
 
+
 class PyUnitAssertionError(AssertionError):
     pass
 
@@ -80,21 +81,21 @@ class Runner(object):
 
     def inspect_clases(self):
         for node in self.ast_tree.body:
-            if (isinstance(node, ast.ClassDef)):
+            if isinstance(node, ast.ClassDef):
                 self.search_def_methods(node)
-            if (isinstance(node, ast.Import)):
+            if isinstance(node, ast.Import):
                 self.import_node(node)
         self.execute_tests()
 
     def import_node(self, node):
         wrapper = ast.Module(body=[node])
         co = compile(wrapper, '<string>', 'exec')
-        exec(co, globals(), test_namespace)
+        exec (co, globals(), test_namespace)
 
     def search_def_methods(self, class_node):
         for node in class_node.body:
-            if (isinstance(node, ast.FunctionDef)):
-                if (self.is_method(node.name)):
+            if isinstance(node, ast.FunctionDef):
+                if self.is_method(node.name):
                     newnode = ast.arguments(args=[], vararg=None, kwarg=None, defaults=[])
                     ast.copy_location(newnode, node.args)
                     node.args = newnode
@@ -108,7 +109,7 @@ class Runner(object):
         wrapper = ast.Module(body=[test_node])
         try:
             co = compile(wrapper, '<string>', 'exec')
-            exec(co, test_namespace)
+            exec (co, test_namespace)
             test_namespace[test_name]()
             self.results.append(SuccessFulResult(test_name))
         except PyUnitAssertionError as e:
@@ -120,9 +121,11 @@ class Runner(object):
         for test in self.methods_to_run:
             self.execute_test(test)
 
+
 class Result(object):
     def report(self):
         pass
+
 
 class SuccessFulResult(Result):
     def __init__(self, test_name):
@@ -130,6 +133,7 @@ class SuccessFulResult(Result):
 
     def report(self):
         print('Test {0} run successfully'.format(self.test_name))
+
 
 class FailedResult(Result):
     def __init__(self, test_name, exception, lineno, message):
@@ -141,6 +145,7 @@ class FailedResult(Result):
     def report(self):
         print("{0} Failed:{1} on line {2}".format(self.test_name, self.message, self.lineno))
         print("Cause: {0}".format(self.exception))
+
 
 class ErrorResult(Result):
     def __init__(self, test_name, exception, lineno, message):
