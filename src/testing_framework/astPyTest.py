@@ -1,7 +1,7 @@
 import ast
 from src.ast_pprint import parseprint
 from types import *
-
+import _ast
 
 class PyUnitAssertionError(AssertionError):
     pass
@@ -46,7 +46,6 @@ class AssertPyUnitTransformer(ast.NodeTransformer):
                     call = value(node)
                     # Wrap the call in an Expr node, because the return value isn't used.
                     newnode = ast.Expr(value=call)
-                    ast.copy_location(newnode, node)
                     ast.fix_missing_locations(newnode)
                     return newnode
         # Return the original node if we don't want to change it.
@@ -67,7 +66,6 @@ class Runner(object):
 
     def run_tests(self, file):
         self.parse_code(file)
-        self.modify_tree()
         self.inspect_clases()
 
     def parse_code(self, filename):
@@ -82,7 +80,8 @@ class Runner(object):
     def inspect_clases(self):
         for node in self.ast_tree.body:
             if isinstance(node, ast.ClassDef):
-                self.search_def_methods(node)
+                new_node = AssertPyUnitTransformer().visit(node)
+                self.search_def_methods(new_node)
             if isinstance(node, ast.Import):
                 self.import_node(node)
         self.execute_tests()
@@ -95,16 +94,17 @@ class Runner(object):
     def search_def_methods(self, class_node):
         for node in class_node.body:
             if isinstance(node, ast.FunctionDef):
-                if self.is_method(node.name):
+                if self.is_test_method(node.name):
                     newnode = ast.arguments(args=[], vararg=None, kwarg=None, defaults=[])
                     ast.copy_location(newnode, node.args)
                     node.args = newnode
                     self.methods_to_run.append(node)
 
-    def is_method(self, method_name):
+    def is_test_method(self, method_name):
         return method_name.startswith('test_')
 
     def execute_test(self, test_node):
+        print(test_node)
         test_name = test_node.name
         wrapper = ast.Module(body=[test_node])
         try:

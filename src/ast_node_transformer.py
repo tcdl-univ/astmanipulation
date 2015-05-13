@@ -7,19 +7,21 @@ import itertools
 from ast_report import *
 
 class RewriteInterpolation(NodeTransformer):
+
     def __init__(self, filename):
         self.filename = filename
         self.enter_linenos = {}  # id -> (lineno, col_offset)
         self.reach_linenos = {}  # id -> (lineno, col_offset)
         self.counter = itertools.count()
+
     def visit_Module(self, module_node):
-        body_future = []
+        body_import = []
         body_rest = []
         for node in module_node.body:
             node = self.visit(node)
             if (not body_rest and isinstance(node, ImportFrom) and
                 node.module == "__future__"):
-                body_future.append(node)
+                body_import.append(node)
             else:
                 body_rest.append(node)
 
@@ -31,13 +33,13 @@ class RewriteInterpolation(NodeTransformer):
             (self.filename, self.enter_linenos, self.reach_linenos)).body[0]
 
         lineno = 1
-        if body_future:
-            lineno = body_future[0].lineno
+        if body_import:
+            lineno = body_import[0].lineno
         for new_node in (import_line, register_line):
             new_node.col_offset = 1
             new_node.lineno = lineno
 
-        new_body = body_future + [import_line, register_line] + body_rest
+        new_body = body_import + [import_line, register_line] + body_rest
         return Module(body=new_body)
 
     def track_enter_leave_lineno(self, node):
